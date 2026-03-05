@@ -38,15 +38,16 @@
             color: #666;
             font-weight: 500;
         }
-        input[type="number"] {
+        input[type="number"], select {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 6px;
             box-sizing: border-box; 
             font-size: 1rem;
+            background-color: white;
         }
-        input[type="number"]:focus {
+        input[type="number"]:focus, select:focus {
             border-color: #007bff;
             outline: none;
         }
@@ -93,6 +94,14 @@
 
 <div class="container">
     <h2>School Kit Calculator</h2>
+
+    <div class="input-group">
+        <label for="dealType">Deal Type</label>
+        <select id="dealType">
+            <option value="1:1">1:1 Deal (Individual Kits)</option>
+            <option value="1:5">1:5 Deal (Shared Kits)</option>
+        </select>
+    </div>
     
     <div class="input-group">
         <label for="grade5">Number of Grade 5 Students</label>
@@ -154,21 +163,33 @@
 <script>
     function calculate() {
         // 1. Get Inputs
+        const dealType = document.getElementById('dealType').value;
         const g5 = parseInt(document.getElementById('grade5').value) || 0;
         const g6 = parseInt(document.getElementById('grade6').value) || 0;
         const g7 = parseInt(document.getElementById('grade7').value) || 0;
         const g8 = parseInt(document.getElementById('grade8').value) || 0;
         const g9 = parseInt(document.getElementById('grade9').value) || 0;
         
-        // Calculations
-        const liIonBatteries = Math.max(g6, g7) * 2;
-        const remotes = Math.ceil(g7 / 3);
-        const chargers = Math.ceil(liIonBatteries / 20);
-        const aaaBatteries = remotes * 2;
-        const arduino = Math.ceil((g5 + g6 + g7) / 3);
-        const esp32 = Math.ceil((g8 + g9) / 3);
+        let liIonBatteries, remotes, chargers, aaaBatteries, arduino, esp32;
 
-        // Update UI
+        // 2. Routing Logic Based on Deal Type
+        if (dealType === '1:1') {
+            liIonBatteries = Math.max(g6, g7) * 2;
+            remotes = Math.ceil(g7 / 3);
+            chargers = Math.ceil(liIonBatteries / 20);
+            aaaBatteries = remotes * 2;
+            arduino = Math.ceil((g5 + g6 + g7) / 3);
+            esp32 = Math.ceil((g8 + g9) / 3);
+        } else if (dealType === '1:5') {
+            liIonBatteries = Math.ceil((Math.max(g6, g7) / 5) * 2);
+            remotes = Math.ceil(g7 / 15); // Note: 5 * 3 = 15
+            chargers = Math.ceil(liIonBatteries / 20);
+            aaaBatteries = remotes * 2;
+            arduino = Math.ceil((g5 + g6 + g7) / 3);
+            esp32 = Math.ceil((g8 + g9) / 3);
+        }
+
+        // 3. Update UI
         document.getElementById('res-li-ion').textContent = liIonBatteries;
         document.getElementById('res-remotes').textContent = remotes;
         document.getElementById('res-chargers').textContent = chargers;
@@ -184,7 +205,7 @@
     }
 
     function copyToClipboard() {
-        // Grab the calculated values
+        const dealType = document.getElementById('dealType').value;
         const liIonBatteries = document.getElementById('res-li-ion').textContent;
         const remotes = document.getElementById('res-remotes').textContent;
         const chargers = document.getElementById('res-chargers').textContent;
@@ -193,9 +214,9 @@
         const esp32 = document.getElementById('res-esp32').textContent;
 
         // Format for spreadsheet: Item [Tab] Quantity [Newline]
-        // \t creates the tab (which puts it in the next column)
-        // \n creates a new line (which puts it in the next row)
+        // Added the Deal Type at the top of the copy paste so you have a record of it
         const spreadsheetData = 
+            `Deal Type\t${dealType}\n` +
             `Li Ion Batteries\t${liIonBatteries}\n` +
             `PS2 Remotes\t${remotes}\n` +
             `Li Ion Chargers\t${chargers}\n` +
@@ -203,13 +224,11 @@
             `Arduino Uno\t${arduino}\n` +
             `ESP32\t${esp32}`;
 
-        // Copy to the system clipboard
+        // Copy to clipboard
         navigator.clipboard.writeText(spreadsheetData).then(() => {
-            // Change button text to show success
             const copyBtn = document.getElementById('copyBtn');
             copyBtn.textContent = "Copied! You can now paste";
             
-            // Revert button text after 3 seconds
             setTimeout(() => {
                 copyBtn.textContent = "Copy for Spreadsheet";
             }, 3000);
