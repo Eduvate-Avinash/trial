@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Kit Order Calculator</title>
+    <title>School Kit Order Calculator & Tracker</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -23,78 +23,50 @@
             width: 100%;
             max-width: 450px;
         }
-        h2 {
-            margin-top: 0;
-            color: #333;
-            text-align: center;
-            margin-bottom: 1.5rem;
+        h2 { margin-top: 0; color: #333; text-align: center; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #666; font-weight: 500; font-size: 0.9rem; }
+        input[type="text"], input[type="number"], select {
+            width: 100%; padding: 0.75rem; border: 1px solid #ddd;
+            border-radius: 6px; box-sizing: border-box; font-size: 1rem; background-color: white;
         }
-        .input-group {
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #666;
-            font-weight: 500;
-        }
-        input[type="number"], select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box; 
-            font-size: 1rem;
-            background-color: white;
-        }
-        input[type="number"]:focus, select:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .results {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid #f0f0f0;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            font-size: 0.95rem;
-        }
-        .result-value {
-            font-weight: bold;
-            color: #007bff;
-        }
+        input:focus, select:focus { border-color: #007bff; outline: none; }
+        .section-title { margin-top: 1.5rem; margin-bottom: 0.5rem; color: #444; font-size: 1.1rem; border-bottom: 2px solid #eee; padding-bottom: 0.25rem; }
+        .results { margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #f0f0f0; }
+        .result-item { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.95rem; }
+        .result-value { font-weight: bold; color: #007bff; }
         button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 1rem;
-            font-weight: bold;
+            width: 100%; padding: 0.75rem; background-color: #007bff; color: white;
+            border: none; border-radius: 6px; font-size: 1rem; cursor: pointer;
+            margin-top: 1.5rem; font-weight: bold;
         }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .copy-btn {
-            background-color: #28a745;
-            margin-top: 1.5rem;
-        }
-        .copy-btn:hover {
-            background-color: #218838;
-        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #ccc; cursor: not-allowed; }
+        .status-msg { text-align: center; margin-top: 1rem; font-weight: bold; font-size: 0.9rem; }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>School Kit Calculator</h2>
+    <h2>Order Tracker</h2>
 
+    <div class="section-title">School Details</div>
+    <div class="input-group">
+        <label for="schoolName">Name of the School</label>
+        <input type="text" id="schoolName" placeholder="Enter school name">
+    </div>
+    <div class="input-group">
+        <label for="sapCode">School SAP Code</label>
+        <input type="text" id="sapCode" placeholder="Enter SAP code">
+    </div>
+    <div class="input-group">
+        <label for="omName">Name of OM Placing Order</label>
+        <input type="text" id="omName" placeholder="Enter your name">
+    </div>
+
+    <div class="section-title">Order Details</div>
     <div class="input-group">
         <label for="dealType">Deal Type</label>
         <select id="dealType">
@@ -104,65 +76,42 @@
     </div>
     
     <div class="input-group">
-        <label for="grade5">Number of Grade 5 Students</label>
-        <input type="number" id="grade5" placeholder="0" min="0">
+        <label>Number of Students per Grade</label>
+        <div style="display: flex; gap: 10px; margin-top: 5px;">
+            <input type="number" id="grade5" placeholder="G5" min="0">
+            <input type="number" id="grade6" placeholder="G6" min="0">
+            <input type="number" id="grade7" placeholder="G7" min="0">
+            <input type="number" id="grade8" placeholder="G8" min="0">
+            <input type="number" id="grade9" placeholder="G9" min="0">
+        </div>
     </div>
 
-    <div class="input-group">
-        <label for="grade6">Number of Grade 6 Students</label>
-        <input type="number" id="grade6" placeholder="0" min="0">
-    </div>
-
-    <div class="input-group">
-        <label for="grade7">Number of Grade 7 Students</label>
-        <input type="number" id="grade7" placeholder="0" min="0">
-    </div>
-
-    <div class="input-group">
-        <label for="grade8">Number of Grade 8 Students</label>
-        <input type="number" id="grade8" placeholder="0" min="0">
-    </div>
-
-    <div class="input-group">
-        <label for="grade9">Number of Grade 9 Students</label>
-        <input type="number" id="grade9" placeholder="0" min="0">
-    </div>
-
-    <button onclick="calculate()">Calculate Orders</button>
+    <button id="calcBtn" onclick="calculateAndSubmit()">Calculate & Submit to Sheet</button>
+    <div id="statusMessage" class="status-msg"></div>
 
     <div class="results" id="results" style="display:none;">
-        <div class="result-item">
-            <span>Li Ion Batteries:</span>
-            <span class="result-value" id="res-li-ion">0</span>
-        </div>
-        <div class="result-item">
-            <span>PS2 Remotes:</span>
-            <span class="result-value" id="res-remotes">0</span>
-        </div>
-        <div class="result-item">
-            <span>Li Ion Chargers:</span>
-            <span class="result-value" id="res-chargers">0</span>
-        </div>
-        <div class="result-item">
-            <span>AAA Batteries:</span>
-            <span class="result-value" id="res-aaa">0</span>
-        </div>
-        <div class="result-item">
-            <span>Arduino Uno:</span>
-            <span class="result-value" id="res-arduino">0</span>
-        </div>
-        <div class="result-item">
-            <span>ESP32:</span>
-            <span class="result-value" id="res-esp32">0</span>
-        </div>
-
-        <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">Copy for Spreadsheet</button>
+        <div class="section-title">Calculated Order</div>
+        <div class="result-item"><span>Li Ion Batteries:</span><span class="result-value" id="res-li-ion">0</span></div>
+        <div class="result-item"><span>PS2 Remotes:</span><span class="result-value" id="res-remotes">0</span></div>
+        <div class="result-item"><span>Li Ion Chargers:</span><span class="result-value" id="res-chargers">0</span></div>
+        <div class="result-item"><span>AAA Batteries:</span><span class="result-value" id="res-aaa">0</span></div>
+        <div class="result-item"><span>Arduino Uno:</span><span class="result-value" id="res-arduino">0</span></div>
+        <div class="result-item"><span>ESP32:</span><span class="result-value" id="res-esp32">0</span></div>
     </div>
 </div>
 
 <script>
-    function calculate() {
+    // PASTE YOUR GOOGLE APPS SCRIPT URL HERE
+    const scriptURL = https://script.google.com/macros/s/AKfycbwHpGpwsqvRGDG79QnaRYXRrHtSnTX9nFnno9mFabKUubU9HXoYjHYclcgLd56V6iBf/exec;
+
+    function calculateAndSubmit() {
+        const btn = document.getElementById('calcBtn');
+        const statusMsg = document.getElementById('statusMessage');
+        
         // 1. Get Inputs
+        const schoolName = document.getElementById('schoolName').value;
+        const sapCode = document.getElementById('sapCode').value;
+        const omName = document.getElementById('omName').value;
         const dealType = document.getElementById('dealType').value;
         const g5 = parseInt(document.getElementById('grade5').value) || 0;
         const g6 = parseInt(document.getElementById('grade6').value) || 0;
@@ -170,9 +119,16 @@
         const g8 = parseInt(document.getElementById('grade8').value) || 0;
         const g9 = parseInt(document.getElementById('grade9').value) || 0;
         
+        // Basic validation
+        if (!schoolName || !sapCode || !omName) {
+            statusMsg.textContent = "Please fill in the School Name, SAP Code, and OM Name.";
+            statusMsg.className = "status-msg error";
+            return;
+        }
+
         let liIonBatteries, remotes, chargers, aaaBatteries, arduino, esp32;
 
-        // 2. Routing Logic Based on Deal Type
+        // 2. Logic Based on Deal Type
         if (dealType === '1:1') {
             liIonBatteries = Math.max(g6, g7) * 2;
             remotes = Math.ceil(g7 / 3);
@@ -182,58 +138,69 @@
             esp32 = Math.ceil((g8 + g9) / 3);
         } else if (dealType === '1:5') {
             liIonBatteries = Math.ceil((Math.max(g6, g7) / 5) * 2);
-            remotes = Math.ceil(g7 / 5); // 
+            remotes = Math.ceil(g7 / 15);
             chargers = Math.ceil(liIonBatteries / 20);
             aaaBatteries = remotes * 2;
-            arduino = Math.ceil((g5 + g6 + g7) / 5);
-            esp32 = Math.ceil((g8 + g9) / 5);
+            arduino = Math.ceil((g5 + g6 + g7) / 3);
+            esp32 = Math.ceil((g8 + g9) / 3);
         }
 
-        // 3. Update UI
+        // 3. Update UI with Results
         document.getElementById('res-li-ion').textContent = liIonBatteries;
         document.getElementById('res-remotes').textContent = remotes;
         document.getElementById('res-chargers').textContent = chargers;
         document.getElementById('res-aaa').textContent = aaaBatteries;
         document.getElementById('res-arduino').textContent = arduino;
         document.getElementById('res-esp32').textContent = esp32;
-
-        // Reset the copy button text if it was previously clicked
-        document.getElementById('copyBtn').textContent = "Copy for Spreadsheet";
-
-        // Show results
         document.getElementById('results').style.display = 'block';
-    }
 
-    function copyToClipboard() {
-        const dealType = document.getElementById('dealType').value;
-        const liIonBatteries = document.getElementById('res-li-ion').textContent;
-        const remotes = document.getElementById('res-remotes').textContent;
-        const chargers = document.getElementById('res-chargers').textContent;
-        const aaaBatteries = document.getElementById('res-aaa').textContent;
-        const arduino = document.getElementById('res-arduino').textContent;
-        const esp32 = document.getElementById('res-esp32').textContent;
+        // 4. Prepare data for Google Sheets
+        const currentDate = new Date().toLocaleString();
+        const payload = {
+            date: currentDate,
+            omName: omName,
+            schoolName: schoolName,
+            sapCode: sapCode,
+            dealType: dealType,
+            g5: g5, g6: g6, g7: g7, g8: g8, g9: g9,
+            liIonBatteries: liIonBatteries,
+            remotes: remotes,
+            chargers: chargers,
+            aaaBatteries: aaaBatteries,
+            arduino: arduino,
+            esp32: esp32
+        };
 
-        // Format for spreadsheet: Item [Tab] Quantity [Newline]
-        // Added the Deal Type at the top of the copy paste so you have a record of it
-        const spreadsheetData = 
-            `Deal Type\t${dealType}\n` +
-            `Li Ion Batteries\t${liIonBatteries}\n` +
-            `PS2 Remotes\t${remotes}\n` +
-            `Li Ion Chargers\t${chargers}\n` +
-            `AAA Batteries\t${aaaBatteries}\n` +
-            `Arduino Uno\t${arduino}\n` +
-            `ESP32\t${esp32}`;
+        // 5. Send data to Google Apps Script
+        btn.disabled = true;
+        btn.textContent = "Submitting to Database...";
+        statusMsg.textContent = "";
 
-        // Copy to clipboard
-        navigator.clipboard.writeText(spreadsheetData).then(() => {
-            const copyBtn = document.getElementById('copyBtn');
-            copyBtn.textContent = "Copied! You can now paste";
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // Bypasses CORS restrictions
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            btn.disabled = false;
+            btn.textContent = "Calculate & Submit to Sheet";
+            statusMsg.textContent = "Success! Data saved to spreadsheet.";
+            statusMsg.className = "status-msg success";
             
+            // Clear inputs after 3 seconds so it's ready for the next school
             setTimeout(() => {
-                copyBtn.textContent = "Copy for Spreadsheet";
+                statusMsg.textContent = "";
+                document.getElementById('schoolName').value = "";
+                document.getElementById('sapCode').value = "";
             }, 3000);
-        }).catch(err => {
-            alert('Failed to copy. Your browser might block this feature.');
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.textContent = "Calculate & Submit to Sheet";
+            statusMsg.textContent = "Calculation complete, but failed to save to sheet. Check console.";
+            statusMsg.className = "status-msg error";
+            console.error('Error!', error.message);
         });
     }
 </script>
