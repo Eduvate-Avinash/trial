@@ -138,7 +138,7 @@
             esp32 = Math.ceil((g8 + g9) / 3);
         } else if (dealType === '1:5') {
             liIonBatteries = Math.ceil((Math.max(g6, g7) / 5) * 2);
-            remotes = Math.ceil(g7 / 15);
+            remotes = Math.ceil(g7 / 5);
             chargers = Math.ceil(liIonBatteries / 20);
             aaaBatteries = remotes * 2;
             arduino = Math.ceil((g5 + g6 + g7) / 5);
