@@ -101,7 +101,7 @@
 </div>
 
 <script>
-    // PASTE YOUR GOOGLE APPS SCRIPT URL HERE
+    // ⚠️ PASTE YOUR GOOGLE APPS SCRIPT URL BETWEEN THE QUOTES BELOW ⚠️
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwHpGpwsqvRGDG79QnaRYXRrHtSnTX9nFnno9mFabKUubU9HXoYjHYclcgLd56V6iBf/exec';
 
     function calculateAndSubmit() {
@@ -121,7 +121,7 @@
         
         // Basic validation
         if (!schoolName || !sapCode || !omName) {
-            statusMsg.textContent = "Please fill in the School Name, SAP Code, and OM Name.";
+            statusMsg.textContent = "Please fill in the School Name, SAP Code, and OM Name above.";
             statusMsg.className = "status-msg error";
             return;
         }
@@ -145,7 +145,7 @@
             esp32 = Math.ceil((g8 + g9) / 3);
         }
 
-        // 3. Update UI with Results
+        // 3. Update UI immediately so you see the numbers
         document.getElementById('res-li-ion').textContent = liIonBatteries;
         document.getElementById('res-remotes').textContent = remotes;
         document.getElementById('res-chargers').textContent = chargers;
@@ -176,10 +176,11 @@
         btn.textContent = "Submitting to Database...";
         statusMsg.textContent = "";
 
+        // Changed Content-Type to text/plain to bypass Google's strict CORS block
         fetch(scriptURL, {
             method: 'POST',
-            mode: 'no-cors', // Bypasses CORS restrictions
-            headers: { 'Content-Type': 'application/json' },
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
         })
         .then(() => {
@@ -188,19 +189,18 @@
             statusMsg.textContent = "Success! Data saved to spreadsheet.";
             statusMsg.className = "status-msg success";
             
-            // Clear inputs after 3 seconds so it's ready for the next school
+            // Clear the school name and SAP code for the next entry
             setTimeout(() => {
                 statusMsg.textContent = "";
                 document.getElementById('schoolName').value = "";
                 document.getElementById('sapCode').value = "";
-            }, 3000);
+            }, 4000);
         })
         .catch(error => {
             btn.disabled = false;
             btn.textContent = "Calculate & Submit to Sheet";
-            statusMsg.textContent = "Calculation complete, but failed to save to sheet. Check console.";
+            statusMsg.textContent = "Calculation complete, but check your internet connection.";
             statusMsg.className = "status-msg error";
-            console.error('Error!', error.message);
         });
     }
 </script>
